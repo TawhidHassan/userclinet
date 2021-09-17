@@ -26,11 +26,6 @@ app.options('*', cors());
 // Set security HTTP headers
 app.use(helmet());
 
-// Development logging
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
-
 app.use(express.json({ limit: '50mb' }));
 // app.use(bodyParser.json({limit: '50mb'}));
 
@@ -45,7 +40,6 @@ app.use(mongoSanitize());
 
 // Data sanitization against XSS
 app.use(xss());
-
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
@@ -68,13 +62,10 @@ app.all('*', (req, res, next) => {
 cron.schedule('0 0 * * *', async () => {
   // console.log('running job');
   try {
-    
   } catch (err) {
     console.log(err);
   }
 });
-
-
 
 app.use(globalErrorHandler);
 
