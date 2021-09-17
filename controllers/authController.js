@@ -10,31 +10,6 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const Email = require('./../utils/email');
 
-const signToken = id => {
-  return jwt.sign({ id }, 'sksksks', {
-    expiresIn: 90
-  });
-};
-
-const createSendToken = (user, statusCode, req, res) => {
-  const token = signToken(user._id);
-
-  res.cookie('jwt', token, {
-    expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-    httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
-  });
-
-  // Remove password from output
-  user.password = undefined;
-
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    user
-  });
-};
-
 //check user exit or not with email
 const validateEmail = async email => {
   const user = await User.findOne({ email });
