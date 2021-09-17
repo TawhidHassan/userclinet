@@ -64,7 +64,11 @@ exports.signup = async (req, res, next) => {
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm
     });
-    createSendToken(newUser, 201, req, res);
+    res.status(201).json({
+      status: 'success',
+      token: 'suisjsiunjsdiusnmiusnmsiunsiusnmiusnsuns',
+      user: newUser
+    });
   } catch (err) {
     console.log(err);
     return res.status(404).json({
@@ -81,54 +85,6 @@ exports.signup = async (req, res, next) => {
 //Top manager in user
 
 //Super manager in user
-
-exports.checkUserSalesTargetAchive = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'user not found.'
-      });
-    }
-
-    const usersales = await User.findById(id).select('sales');
-    const userTarget = await User.findById(id).select('target');
-
-    const calculation = userTarget.target - usersales.sales;
-
-    if (
-      userTarget.target === usersales.sales ||
-      userTarget.target < usersales.sales
-    ) {
-      const userx = await User.findOneAndUpdate(
-        { _id: id },
-        {
-          targetAchive: user.targetAchive + 1
-        },
-        { new: true }
-      );
-      return res.status(200).json({
-        success: true,
-        massgae: 'you achive target'
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      youShouldSales: calculation,
-      currentSales: usersales.sales,
-      target: userTarget.target
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(400).json({
-      success: false,
-      message: 'Unable to see the result , Please try again later.'
-    });
-  }
-};
 
 exports.login = async (req, res, next) => {
   try {
