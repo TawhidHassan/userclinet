@@ -154,9 +154,13 @@ exports.login = async (req, res, next) => {
     }
 
     const result = await User.findOne({ email });
-
+    console.log(result);
     // 3) If everything ok, send token to clientxxxx
-    createSendToken(result, 200, req, res);
+    res.status(200).json({
+      status: 'success',
+      token: 'xxxx',
+      user: result
+    });
   } catch (err) {
     console.log(err);
   }
